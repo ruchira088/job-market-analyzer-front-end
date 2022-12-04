@@ -1,22 +1,8 @@
-import React, {ChangeEvent, MouseEventHandler, useState} from "react"
-import InputTextField from "../components/InputTextField"
+import React, {MouseEventHandler, useState} from "react"
+import InputTextField, {setValueHook} from "../components/InputTextField"
 import ErrorDisplay from "../components/ErrorDisplay"
 import {createUser} from "../services/UserService"
-
-const nonEmptyValidator =
-    (values: { [key: string]: string }): string[] => Object.entries(values)
-        .reduce(
-            (acc: string[], entry: [string, string]) => {
-                const [key, value] = entry
-
-                if (value.trim().length === 0) {
-                    return acc.concat(`${key} cannot be empty`)
-                } else {
-                    return acc
-                }
-            },
-            []
-        )
+import {nonEmptyValidator} from "../components/Validators"
 
 const SignupPage = () => {
     const [email, setEmail] = useState("")
@@ -30,10 +16,12 @@ const SignupPage = () => {
     const onSubmit: MouseEventHandler<HTMLButtonElement> =
         event => {
             event.preventDefault()
-            const allErrors = validate()
+            const validationErrors = validate()
 
-            if (allErrors.length === 0) {
+            if (validationErrors.length === 0) {
                 createUser({email, password, firstName, lastName})
+            } else {
+                setErrors(validationErrors)
             }
         }
 
@@ -44,19 +32,10 @@ const SignupPage = () => {
         const passwordErrors =
             password.trim() === confirmPassword.trim() ? [] : ["Password mismatch"]
 
-        const allErrors = emptyErrors.concat(passwordErrors)
-
-        setErrors(allErrors)
-
-        return allErrors
+        return emptyErrors.concat(passwordErrors)
     }
 
-    const setValue =
-        (fn: (value: string) => void) =>
-            (event: ChangeEvent<HTMLInputElement>) => {
-                setErrors([])
-                fn(event.target.value)
-            }
+    const setValue = setValueHook(() => setErrors([]))
 
     return (
         <div className="signup-page">
@@ -81,7 +60,7 @@ const SignupPage = () => {
                     label="Last Name"
                     value={lastName} onChange={setValue(setLastName)}/>
 
-                <button onClick={onSubmit}>Submit</button>
+                <button onClick={onSubmit}>Signup</button>
             </div>
             <ErrorDisplay errors={errors}/>
         </div>

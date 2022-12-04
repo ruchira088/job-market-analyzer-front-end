@@ -1,4 +1,4 @@
-import React, {ChangeEventHandler, HTMLInputTypeAttribute} from "react"
+import React, {ChangeEvent, ChangeEventHandler, HTMLInputTypeAttribute} from "react"
 import classNames from "classnames"
 
 interface InputTextFieldParameters {
@@ -13,8 +13,16 @@ interface InputTextFieldParameters {
 const InputTextField =
     (props: InputTextFieldParameters) =>
         <div className={classNames("input-field", props.classNames)}>
-            <label>{ props.label }</label>
+            <label>{props.label}</label>
             <input className="text-field" type={props.type} value={props.value} onChange={props.onChange}/>
         </div>
+
+export const setValueHook =
+    (fn: () => void) => (onValue: (value: string) => void) =>
+        (event: ChangeEvent<HTMLInputElement>) => {
+            fn()
+            onValue(event.target.value)
+        }
+
 
 export default InputTextField
