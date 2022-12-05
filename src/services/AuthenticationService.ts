@@ -1,5 +1,6 @@
 import {API_URL} from "../config/ApiConfiguration"
-import {ErrorResponse} from "./models/ErrorResponse"
+import {AuthenticationToken} from "./models/AuthenticationToken"
+import {handleResponse} from "../utils/HttpUtils"
 
 interface LoginRequest {
     readonly email: string
@@ -7,21 +8,15 @@ interface LoginRequest {
 }
 
 export const loginUser =
-    async (loginRequest: LoginRequest) => {
+    async (loginRequest: LoginRequest): Promise<AuthenticationToken> => {
         const response = await fetch(`${API_URL}/authentication`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(loginRequest)
+            body: JSON.stringify(loginRequest),
+            credentials: "include"
         })
 
-        const body = await response.json()
-
-        if (response.status === 201) {
-            return body
-        } else {
-            const errorResponse = body as unknown as ErrorResponse
-            return Promise.reject(errorResponse.errorMessage)
-        }
+        return handleResponse(response)
     }

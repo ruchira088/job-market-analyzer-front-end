@@ -1,6 +1,6 @@
 import {API_URL} from "../config/ApiConfiguration"
 import {User} from "./models/User"
-import {ErrorResponse} from "./models/ErrorResponse"
+import {handleResponse} from "../utils/HttpUtils"
 
 interface CreateUserRequest {
     readonly email: string
@@ -18,12 +18,5 @@ export const createUser =
                 body: JSON.stringify(createUserRequest)
             })
 
-        const body = response.json()
-
-        if (response.status === 201) {
-            return body
-        } else {
-            const error = body as unknown as ErrorResponse
-            return Promise.reject(error.errorMessage)
-        }
+        return handleResponse(response)
     }

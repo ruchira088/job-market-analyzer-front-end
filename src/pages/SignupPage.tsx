@@ -2,7 +2,7 @@ import React, {MouseEventHandler, useState} from "react"
 import InputTextField, {setValueHook} from "../components/InputTextField"
 import ErrorDisplay from "../components/ErrorDisplay"
 import {createUser} from "../services/UserService"
-import {nonEmptyValidator} from "../components/Validators"
+import {nonEmptyValidator} from "../utils/Validators"
 
 const SignupPage = () => {
     const [email, setEmail] = useState("")
@@ -14,8 +14,7 @@ const SignupPage = () => {
     const [errors, setErrors] = useState<string[]>([])
 
     const onSubmit: MouseEventHandler<HTMLButtonElement> =
-        event => {
-            event.preventDefault()
+        () => {
             const validationErrors = validate()
 
             if (validationErrors.length === 0) {

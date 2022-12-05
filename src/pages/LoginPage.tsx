@@ -1,7 +1,7 @@
 import React, {MouseEventHandler, useState} from "react"
 import InputTextField, {setValueHook} from "../components/InputTextField"
 import ErrorDisplay from "../components/ErrorDisplay"
-import {nonEmptyValidator} from "../components/Validators"
+import {nonEmptyValidator} from "../utils/Validators"
 import {loginUser} from "../services/AuthenticationService"
 
 const LoginPage = () => {
@@ -13,8 +13,7 @@ const LoginPage = () => {
     const setValue = setValueHook(() => setErrors([]))
 
     const onSubmit: MouseEventHandler<HTMLButtonElement> =
-        event => {
-            event.preventDefault()
+        () => {
             const validationErrors = nonEmptyValidator({email, password})
 
             if (validationErrors.length === 0) {
@@ -35,5 +34,6 @@ const LoginPage = () => {
             <ErrorDisplay errors={errors}/>
         </div>
     )
-
 }
+
+export default LoginPage
