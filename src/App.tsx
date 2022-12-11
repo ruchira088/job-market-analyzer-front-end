@@ -1,9 +1,10 @@
 import React from "react"
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom"
 import "./App.css"
-import SignupPage from "./pages/SignupPage"
+import SignupPage from "./pages/signup/SignupPage"
 import LoginPage from "./pages/LoginPage"
 import LinkedInCredentialsPage from "./pages/LinkedInCredentialsPage"
+import JobsPage from "./pages/JobsPage"
 
 const App =
     () =>
@@ -12,6 +13,7 @@ const App =
                 <Routes>
                     <Route path="/signup" element={<SignupPage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/jobs" element={<JobsPage/>}/>
                     <Route path="/linkedin/credentials" element={<LinkedInCredentialsPage/>}/>
                 </Routes>
             </Router>

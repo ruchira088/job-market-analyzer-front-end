@@ -1,0 +1,22 @@
+.signupPage {
+  background-image: url("../../../public/images/job-market.jpeg");
+  background-size: cover;
+  height: 100vh;
+}
+
+.signupForm {
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.inputTextField {
+  padding: 0.5em;
+
+  label {
+    display: block;
+  }
+}
+
+.signupButton {
+  margin: 2em;
+}

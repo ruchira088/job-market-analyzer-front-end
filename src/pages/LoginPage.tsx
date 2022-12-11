@@ -1,6 +1,6 @@
 import React, {MouseEventHandler, useState} from "react"
 import InputTextField, {setValueHook} from "../components/InputTextField"
-import ErrorDisplay from "../components/ErrorDisplay"
+import ErrorDisplay from "../components/error-display/ErrorDisplay"
 import {nonEmptyValidator} from "../utils/Validators"
 import {loginUser} from "../services/AuthenticationService"
 

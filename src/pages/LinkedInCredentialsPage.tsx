@@ -1,7 +1,7 @@
 import React, {MouseEventHandler, useEffect, useState} from "react"
 import {LinkedInCredentials} from "../services/models/LinkedInCredentials"
 import {fetchLinkedInCredentials, insertLinkedInCredentials} from "../services/LinkedInCredentialsService"
-import ErrorDisplay from "../components/ErrorDisplay"
+import ErrorDisplay from "../components/error-display/ErrorDisplay"
 import InputTextField, {setValueHook} from "../components/InputTextField"
 import {nonEmptyValidator} from "../utils/Validators"
 

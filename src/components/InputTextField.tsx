@@ -3,7 +3,7 @@ import classNames from "classnames"
 
 interface InputTextFieldParameters {
     readonly label: string
-    readonly classNames?: string[]
+    readonly className?: string | string[]
     readonly type?: HTMLInputTypeAttribute
 
     readonly value: string
@@ -12,9 +12,9 @@ interface InputTextFieldParameters {
 
 const InputTextField =
     (props: InputTextFieldParameters) =>
-        <div className={classNames("input-field", props.classNames)}>
+        <div className={classNames(props.className)}>
             <label>{props.label}</label>
-            <input className="text-field" type={props.type} value={props.value} onChange={props.onChange}/>
+            <input type={props.type} value={props.value} onChange={props.onChange}/>
         </div>
 
 export const setValueHook =
