@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Fetch git information
+      import_tasks: tasks/build-and-publish-docker-image.yml
+      vars:
+        publish: false
