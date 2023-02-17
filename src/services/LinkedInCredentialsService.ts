@@ -1,4 +1,4 @@
-import {API_URL} from "../config/ApiConfiguration"
+import {apiUrl} from "../config/ApiConfiguration"
 import {handleResponse} from "../utils/HttpUtils"
 import {LinkedInCredentials} from "./models/LinkedInCredentials"
 
@@ -9,7 +9,7 @@ interface LinkedInCredentialsInsertionRequest {
 
 export const insertLinkedInCredentials =
     async (linkedInCredentialsInsertionRequest: LinkedInCredentialsInsertionRequest): Promise<LinkedInCredentials> => {
-        const response = await fetch(`${API_URL}/linkedIn/credentials`, {
+        const response = await fetch(`${apiUrl}/linkedIn/credentials`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -23,7 +23,7 @@ export const insertLinkedInCredentials =
 
 export const fetchLinkedInCredentials =
     async (): Promise<LinkedInCredentials | null> => {
-        const response = await fetch(`${API_URL}/linkedIn/credentials`, {credentials: "include"})
+        const response = await fetch(`${apiUrl}/linkedIn/credentials`, {credentials: "include"})
 
         if (response.status === 404) {
             return null

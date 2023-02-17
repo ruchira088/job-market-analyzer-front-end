@@ -1,4 +1,4 @@
-import {API_URL} from "../config/ApiConfiguration"
+import {apiUrl} from "../config/ApiConfiguration"
 import {User} from "./models/User"
 import {handleResponse} from "../utils/HttpUtils"
 
@@ -12,7 +12,7 @@ interface CreateUserRequest {
 export const createUser =
     async (createUserRequest: CreateUserRequest): Promise<User> => {
         const response =
-            await fetch(`${API_URL}/user`, {
+            await fetch(`${apiUrl}/user`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(createUserRequest)
