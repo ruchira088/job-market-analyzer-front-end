@@ -4,7 +4,7 @@ const { promisify } = require("util")
 const path = require("path")
 const SimpleGit = require("simple-git")
 
-const PROD_BRANCH = "master"
+const PROD_BRANCH = "main"
 const DEV_BRANCH = "dev"
 
 const SNAPSHOT = "SNAPSHOT"
