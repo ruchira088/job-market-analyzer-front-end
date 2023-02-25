@@ -4,6 +4,7 @@ import {fetchLinkedInCredentials, insertLinkedInCredentials} from "../services/L
 import ErrorDisplay from "../components/error-display/ErrorDisplay"
 import InputTextField, {setValueHook} from "../components/InputTextField"
 import {nonEmptyValidator} from "../utils/Validators"
+import {Link} from "react-router-dom"
 
 interface LinkedInCredentialsFormParameters {
     readonly email?: string
@@ -104,17 +105,26 @@ const LinkedInCredentialsPage = () => {
             .finally(() => setIsReady(true))
     }
 
-    if (isReady) {
-        if (errors.length > 0) {
-            return <ErrorDisplay errors={errors}/>
-        } else if (linkedInCredentials !== null) {
-            return <CredentialsView credentials={linkedInCredentials} onCredentialsUpdated={loadCredentials}/>
+    const content = () => {
+        if (isReady) {
+            if (errors.length > 0) {
+                return <ErrorDisplay errors={errors}/>
+            } else if (linkedInCredentials !== null) {
+                return <CredentialsView credentials={linkedInCredentials} onCredentialsUpdated={loadCredentials}/>
+            } else {
+                return <NoCredentialsView onCredentialsCreated={loadCredentials}/>
+            }
         } else {
-            return <NoCredentialsView onCredentialsCreated={loadCredentials}/>
+            return <div>Loading</div>
         }
-    } else {
-        return <div>Loading</div>
     }
+
+    return (
+        <div>
+            { content() }
+            <Link to="/">Home Page</Link>
+        </div>
+    )
 }
 
 export default LinkedInCredentialsPage

@@ -1,9 +1,12 @@
 import React, {MouseEventHandler, useState} from "react"
+import {Link} from "react-router-dom"
 import InputTextField, {setValueHook} from "../../components/InputTextField"
 import ErrorDisplay from "../../components/error-display/ErrorDisplay"
 import {createUser} from "../../services/UserService"
 import {nonEmptyValidator} from "../../utils/Validators"
 import styles from "./SignupPage.module.scss"
+import {loginUser} from "../../services/AuthenticationService"
+import {withRetries} from "../../utils/PromiseUtils"
 
 const SignupPage = () => {
     const [email, setEmail] = useState("")
@@ -20,6 +23,13 @@ const SignupPage = () => {
 
             if (validationErrors.length === 0) {
                 createUser({email, password, firstName, lastName})
+                    .catch(error => {
+                            setErrors([error])
+                            return Promise.reject(errors)
+                        }
+                    )
+                    .then(() => withRetries(() => loginUser({email, password}), 100, 3))
+                    .then(() => window.location.replace("/"))
             } else {
                 setErrors(validationErrors)
             }
@@ -78,6 +88,7 @@ const SignupPage = () => {
                     className={styles.inputTextField}/>
 
                 <button className={styles.signupButton} onClick={onSubmit}>Signup</button>
+                <Link to="/login">Sign In</Link>
                 <ErrorDisplay errors={errors}/>
             </div>
         </div>
