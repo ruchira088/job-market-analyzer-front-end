@@ -4,28 +4,27 @@ import {Link} from "react-router-dom"
 import {Subscription} from "rxjs"
 
 const JobsPage = () => {
-    const [crawlInProgress, setCrawlInProgress] = useState(false)
-    let subscription: Subscription | undefined = undefined
+    const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
 
     const crawl = () => {
-        if (!crawlInProgress) {
-            setCrawlInProgress(true)
+        if (subscription === undefined) {
 
-            subscription = crawlJobs.subscribe(console.log)
-            subscription.add(() => setCrawlInProgress(false))
+            const subscription: Subscription = crawlJobs.subscribe(console.log)
+            subscription.add(() => setSubscription(undefined))
+
+            setSubscription(subscription)
         }
     }
 
     useEffect(() => () => {
         if (subscription !== undefined && !subscription.closed) {
-            console.log("Closing subscription")
             subscription.unsubscribe()
         }
     }, [ subscription ])
 
     return (
         <div>
-            <button onClick={crawl} disabled={crawlInProgress}>Crawl Jobs</button>
+            <button onClick={crawl} disabled={subscription !== undefined}>Crawl Jobs</button>
             <Link to="/">Home Page</Link>
         </div>
     )
