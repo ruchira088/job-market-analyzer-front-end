@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from "react"
-import {crawlJobs} from "../services/JobService"
+import {crawledJobsObservable} from "../../services/SearchService"
 import {Link} from "react-router-dom"
 import {Subscription} from "rxjs"
+import {CrawledJob} from "../../services/models/CrawledJob"
 
 const JobsPage = () => {
     const [subscription, setSubscription] = useState<Subscription | undefined>(undefined)
+    const [crawledJobs, setCrawledJobs] = useState<CrawledJob[]>([])
 
     const crawl = () => {
         if (subscription === undefined) {
 
-            const subscription: Subscription = crawlJobs.subscribe(console.log)
+            const subscription: Subscription =
+                crawledJobsObservable
+                    .subscribe(crawledJob => setCrawledJobs(crawledJobs.concat(crawledJob)))
+
             subscription.add(() => setSubscription(undefined))
 
             setSubscription(subscription)
