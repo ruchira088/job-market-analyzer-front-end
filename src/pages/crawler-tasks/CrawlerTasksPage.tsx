@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react"
 import {retrieveCrawlerTasks} from "../../services/SearchService"
 import {CrawlerTask} from "../../services/models/CrawlerTask"
 import CrawlerTaskCard from "./components/CrawlerTaskCard"
+import {Link} from "react-router-dom"
 
 const CrawlerTasksPage = () => {
     const [crawlerTasks, setCrawlerTasks] = useState<CrawlerTask[]>([])
@@ -17,11 +18,18 @@ const CrawlerTasksPage = () => {
                 }
 
             })
-    }, [ pageNumber ])
+    }, [pageNumber])
 
     return (
         <div>
-            { crawlerTasks.map(crawlerTask => <CrawlerTaskCard key={crawlerTask.id} {...crawlerTask}/>)}
+            {
+                crawlerTasks
+                    .map(crawlerTask =>
+                        <Link key={crawlerTask.id} to={`/crawler-task/id/${crawlerTask.id}`}>
+                            <CrawlerTaskCard key={crawlerTask.id} {...crawlerTask}/>
+                        </Link>
+                    )
+            }
         </div>
     )
 }

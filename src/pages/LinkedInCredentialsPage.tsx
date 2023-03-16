@@ -122,7 +122,6 @@ const LinkedInCredentialsPage = () => {
     return (
         <div>
             { content() }
-            <Link to="/">Home Page</Link>
         </div>
     )
 }

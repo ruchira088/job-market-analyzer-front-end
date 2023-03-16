@@ -30,7 +30,6 @@ const JobsPage = () => {
     return (
         <div>
             <button onClick={crawl} disabled={subscription !== undefined}>Crawl Jobs</button>
-            <Link to="/">Home Page</Link>
         </div>
     )
 }

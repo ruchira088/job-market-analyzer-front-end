@@ -3,17 +3,33 @@ import {CrawlerTask} from "../../../services/models/CrawlerTask"
 import {Maybe, None, Some} from "monet"
 import {jobCountByCrawlerTaskId} from "../../../services/SearchService"
 
-const CrawlerTaskCard = (props: CrawlerTask) => {
+const CrawlerTaskCard = (crawlerTask: CrawlerTask) => {
     const [jobCount, setJobCount] = useState<Maybe<number>>(None())
 
     useEffect(() => {
-        jobCountByCrawlerTaskId(props.id)
+        jobCountByCrawlerTaskId(crawlerTask.id)
             .then(count => setJobCount(Some(count)))
     }, [])
 
     return (
         <div>
-            { jobCount.map(count => <div>{ count }</div>).orUndefined() }
+            {
+                jobCount
+                    .map(count =>
+                        <div>
+                            <div>
+                                {crawlerTask.id}
+                            </div>
+                            <div>
+                                {crawlerTask.startedAt.toString()}
+                            </div>
+                            <div>
+                                {count}
+                            </div>
+                        </div>
+                    )
+                    .orUndefined()
+            }
         </div>
     )
 }

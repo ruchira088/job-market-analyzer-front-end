@@ -24,21 +24,28 @@ export const crawledJobsObservable: Observable<CrawledJob> =
     })
 
 export const retrieveCrawlerTasks = async (pageNumber: number): Promise<PaginatedResponse<CrawlerTask>> => {
-    const response = await fetch(`${apiUrl}/search/crawler-task?page-number=${pageNumber}`, { credentials: "include" })
+    const response = await fetch(`${apiUrl}/search/crawler-task?page-number=${pageNumber}`, {credentials: "include"})
     const responseBody = await handleResponse(response)
 
     return parsePaginatedResponse(responseBody, parseCrawlerTask)
 }
 
 export const jobCountByCrawlerTaskId = async (crawlerTaskId: string): Promise<number> => {
-    const response = await fetch(`${apiUrl}/search/jobs/crawler-task/id/${crawlerTaskId}/count`, { credentials: "include" })
-    const { count } = await handleResponse(response) as { count: number }
+    const response = await fetch(`${apiUrl}/search/jobs/crawler-task/id/${crawlerTaskId}/count`, {credentials: "include"})
+    const {count} = await handleResponse(response) as { count: number }
 
     return count
 }
 
+export const retrieveJobsByCrawlerTaskId = async (crawlerTaskId: string, pageSize: number, pageNumber: number): Promise<Job[]> => {
+    const response = await fetch(`${apiUrl}/search/jobs/crawler-task/id/${crawlerTaskId}?page-size=${pageSize}&page-number=${pageNumber}`, {credentials: "include"})
+    const {results} = await handleResponse(response) as PaginatedResponse<Job>
+
+    return results
+}
+
 function parsePaginatedResponse<T>(json: any, parser: (value: any) => T): PaginatedResponse<T> {
-    return { pageNumber: json.pageNumber, pageSize: json.pageSize, results: json.results.map(parser) }
+    return {pageNumber: json.pageNumber, pageSize: json.pageSize, results: json.results.map(parser)}
 }
 
 const parseCrawlerTask = (json: any): CrawlerTask =>

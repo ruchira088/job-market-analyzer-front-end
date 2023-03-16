@@ -6,6 +6,7 @@ export interface Job {
     readonly link: string
     readonly title: string
     readonly companyName: string
+    readonly companyLogoUrl: string
     readonly location: string
     readonly details: string
     readonly crawledAt: Dayjs
