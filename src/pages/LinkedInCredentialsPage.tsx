@@ -4,7 +4,6 @@ import {fetchLinkedInCredentials, insertLinkedInCredentials} from "../services/L
 import ErrorDisplay from "../components/error-display/ErrorDisplay"
 import InputTextField, {setValueHook} from "../components/InputTextField"
 import {nonEmptyValidator} from "../utils/Validators"
-import {Link} from "react-router-dom"
 
 interface LinkedInCredentialsFormParameters {
     readonly email?: string

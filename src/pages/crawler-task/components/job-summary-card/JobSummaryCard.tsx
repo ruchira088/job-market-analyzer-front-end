@@ -11,8 +11,8 @@ const JobSummaryCard = (job: Job) =>
         <div className={styles.detailsColumn}>
             <div>{ job.title }</div>
             <div>{ job.companyName }</div>
-            <div>{ job.workplaceType }</div>
             <div>{ job.location }</div>
+            <div>{ job.workplaceType }</div>
         </div>
     </div>
 

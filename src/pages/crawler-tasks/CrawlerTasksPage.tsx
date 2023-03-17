@@ -11,7 +11,7 @@ const CrawlerTasksPage = () => {
     useEffect(() => {
         retrieveCrawlerTasks(pageNumber)
             .then(({results, pageSize}) => {
-                setCrawlerTasks(crawlerTasks.concat(results))
+                setCrawlerTasks(crawlerTasks => crawlerTasks.concat(results))
 
                 if (results.length === pageSize) {
                     setPageNumber(pageNumber + 1)

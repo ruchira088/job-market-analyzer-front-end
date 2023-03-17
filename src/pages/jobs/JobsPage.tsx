@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react"
 import {crawledJobsObservable} from "../../services/SearchService"
-import {Link} from "react-router-dom"
 import {Subscription} from "rxjs"
 import {CrawledJob} from "../../services/models/CrawledJob"
 

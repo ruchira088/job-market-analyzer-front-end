@@ -9,7 +9,7 @@ const CrawlerTaskCard = (crawlerTask: CrawlerTask) => {
     useEffect(() => {
         jobCountByCrawlerTaskId(crawlerTask.id)
             .then(count => setJobCount(Some(count)))
-    }, [])
+    }, [ crawlerTask.id ])
 
     return (
         <div>

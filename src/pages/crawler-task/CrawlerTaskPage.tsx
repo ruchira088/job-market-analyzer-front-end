@@ -7,14 +7,14 @@ import JobSummaryCard from "./components/job-summary-card/JobSummaryCard"
 
 const CrawlerTaskPage = () => {
     const pageSize = 10
-    const {crawlerTaskId} = useParams()
+    const {crawlerTaskId} = useParams() as { crawlerTaskId: string }
 
     const [jobs, setJobs] = useState<Maybe<Job[]>>(None())
     const [pageNumber, setPageNumber] = useState<number>(0)
 
     useEffect(
         () => {
-            retrieveJobsByCrawlerTaskId(crawlerTaskId as string, pageSize, pageNumber)
+            retrieveJobsByCrawlerTaskId(crawlerTaskId, pageSize, pageNumber)
                 .then(result => {
                     setJobs(jobs => Some(jobs.getOrElse([]).concat(result)))
 
@@ -23,7 +23,7 @@ const CrawlerTaskPage = () => {
                     }
                 })
         },
-        [pageNumber]
+        [pageNumber, crawlerTaskId]
     )
 
 
@@ -32,7 +32,7 @@ const CrawlerTaskPage = () => {
             {
                 jobs.map(values =>
                     values.map(job =>
-                        <Link key={job.id} to="">
+                        <Link key={job.id} to={`/job/id/${job.id}`}>
                             <JobSummaryCard {...job}/>
                         </Link>
                     )
