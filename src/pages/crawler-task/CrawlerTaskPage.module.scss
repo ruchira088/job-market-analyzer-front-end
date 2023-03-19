@@ -1,0 +1,21 @@
+.crawlerTaskPage {
+  display: flex;
+}
+
+.jobsColumn {
+  flex: 1;
+}
+
+.jobSummaryCardLink {
+  text-decoration: none;
+
+  &.selected {
+    div {
+      background-color: rgb(171, 209, 222);
+    }
+  }
+}
+
+.jobDetailsColumn {
+  flex: 2;
+}

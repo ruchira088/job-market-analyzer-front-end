@@ -21,6 +21,7 @@ const AuthenticatedRoutes = () =>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/crawler-tasks" element={<CrawlerTasksPage/>}/>
             <Route path="/crawler-task/id/:crawlerTaskId" element={<CrawlerTaskPage/>}/>
+            <Route path="/crawler-task/id/:crawlerTaskId/job/id/:jobId" element={<CrawlerTaskPage/>}/>
             <Route path="/jobs" element={<JobsPage/>}/>
             <Route path="/job/id/:jobId" element={<JobPage/>}/>
             <Route path="/linkedin/credentials" element={<LinkedInCredentialsPage/>}/>

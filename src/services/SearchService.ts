@@ -18,7 +18,7 @@ export const crawledJobsObservable: Observable<CrawledJob> =
         })
 
         eventSource.addEventListener("CRAWLED_JOB", (messageEvent: MessageEvent) => {
-            const crawledJob = parseCrawledJob(messageEvent.data)
+            const crawledJob = parseCrawledJob(JSON.parse(messageEvent.data))
             subscriber.next(crawledJob)
         })
     })
