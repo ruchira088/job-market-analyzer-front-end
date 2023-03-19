@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react"
 import {Link, useParams, useNavigate} from "react-router-dom"
-import {Job} from "../../services/models/Job"
 import {Maybe, None, Some} from "monet"
+import classNames from "classnames"
+import {Job} from "../../services/models/Job"
 import {retrieveJobsByCrawlerTaskId} from "../../services/SearchService"
 import JobSummaryCard from "./components/job-summary-card/JobSummaryCard"
 import JobDetails from "../job/components/JobDetails"
 
 import styles from "./CrawlerTaskPage.module.scss"
-import classNames from "classnames"
 
 const CrawlerTaskPage = () => {
     const pageSize = 10
