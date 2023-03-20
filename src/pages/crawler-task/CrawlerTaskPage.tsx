@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react"
-import {Link, useParams, useNavigate} from "react-router-dom"
+import React, {ChangeEvent, ChangeEventHandler, useEffect, useState} from "react"
+import {Link, useNavigate, useParams} from "react-router-dom"
 import {Maybe, None, Some} from "monet"
 import classNames from "classnames"
 import {Job} from "../../services/models/Job"
@@ -15,21 +15,23 @@ const CrawlerTaskPage = () => {
 
     const [maybeJobs, setJobs] = useState<Maybe<Job[]>>(None())
     const [pageNumber, setPageNumber] = useState<number>(0)
+    const [maybeKeyword, setKeyword] = useState<Maybe<string>>(None())
+    const [maybeTimeoutId, setTimeoutId] = useState<Maybe<NodeJS.Timeout>>(None())
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        retrieveJobsByCrawlerTaskId(crawlerTaskId, 1, 0)
+        retrieveJobsByCrawlerTaskId(crawlerTaskId, maybeKeyword, 1, 0)
             .then(jobs => {
                 if (jobId === undefined && jobs.length > 0) {
                     navigate(`/crawler-task/id/${crawlerTaskId}/job/id/${jobs[0].id}`)
                 }
             })
-    }, [jobId, navigate, crawlerTaskId])
+    }, [jobId, navigate, crawlerTaskId, maybeKeyword])
 
     useEffect(
         () => {
-            retrieveJobsByCrawlerTaskId(crawlerTaskId, pageSize, pageNumber)
+            retrieveJobsByCrawlerTaskId(crawlerTaskId, maybeKeyword, pageSize, pageNumber)
                 .then(result => {
                     setJobs(jobs => Some(jobs.getOrElse([]).concat(result)))
 
@@ -38,26 +40,47 @@ const CrawlerTaskPage = () => {
                     }
                 })
         },
-        [pageNumber, crawlerTaskId]
+        [pageNumber, crawlerTaskId, maybeKeyword]
     )
 
+    const onTextInput: ChangeEventHandler<HTMLInputElement> =
+        (inputEvent: ChangeEvent<HTMLInputElement>) => {
+            maybeTimeoutId.forEach(timeoutId => clearTimeout(timeoutId))
+
+            const maybeText =
+                Maybe.fromFalsy(inputEvent.target.value)
+                    .filter(input => input.length !== 0)
+
+            const timeoutId =
+                setTimeout(() => {
+                    setKeyword(maybeText)
+                    setPageNumber(0)
+                    setJobs(None())
+                    navigate(`/crawler-task/id/${crawlerTaskId}`)
+                }, 500)
+
+            setTimeoutId(Some(timeoutId))
+        }
 
     return (
         <div className={styles.crawlerTaskPage}>
             <div className={styles.jobsColumn}>
-                {
-                    maybeJobs.map(values =>
-                        values.map(job =>
-                            <Link
-                                to={`/crawler-task/id/${crawlerTaskId}/job/id/${job.id}`}
-                                key={job.id}
-                                className={classNames(styles.jobSummaryCardLink, {[styles.selected]: job.id === jobId})}>
-                                <JobSummaryCard {...job}/>
-                            </Link>
+                <input onChange={onTextInput}/>
+                <div>
+                    {
+                        maybeJobs.map(values =>
+                            values.map(job =>
+                                <Link
+                                    to={`/crawler-task/id/${crawlerTaskId}/job/id/${job.id}`}
+                                    key={job.id}
+                                    className={classNames(styles.jobSummaryCardLink, {[styles.selected]: job.id === jobId})}>
+                                    <JobSummaryCard {...job}/>
+                                </Link>
+                            )
                         )
-                    )
-                        .orUndefined()
-                }
+                            .orUndefined()
+                    }
+                </div>
             </div>
             <div className={styles.jobDetailsColumn}>
                 {

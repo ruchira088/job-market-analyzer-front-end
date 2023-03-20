@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {authenticatedUser} from "./services/AuthenticationService"
 
 import "./App.css"
-import AuthenticatedRoutes from "./routes/AuthenticatedRoutes"
+import AuthenticatedRoutes from "./routes/authenticated/AuthenticatedRoutes"
 import UnauthenticatedRoutes from "./routes/UnauthenticatedRoutes"
 
 const App =

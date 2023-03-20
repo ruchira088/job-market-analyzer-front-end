@@ -44,8 +44,8 @@ export const retrieveJobById = async (jobId: string): Promise<Job> => {
     return job
 }
 
-export const retrieveJobsByCrawlerTaskId = async (crawlerTaskId: string, pageSize: number, pageNumber: number): Promise<Job[]> => {
-    const response = await fetch(`${apiUrl}/search/jobs/crawler-task/id/${crawlerTaskId}?page-size=${pageSize}&page-number=${pageNumber}`, {credentials: "include"})
+export const retrieveJobsByCrawlerTaskId = async (crawlerTaskId: string, maybeKeyword: Maybe<string>, pageSize: number, pageNumber: number): Promise<Job[]> => {
+    const response = await fetch(`${apiUrl}/search/jobs/crawler-task/id/${crawlerTaskId}?${maybeKeyword.map(keyword => `keyword=${keyword}&`).getOrElse("")}page-size=${pageSize}&page-number=${pageNumber}`, {credentials: "include"})
     const {results} = await handleResponse(response) as PaginatedResponse<Job>
 
     return results
