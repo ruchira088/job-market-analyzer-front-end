@@ -62,11 +62,22 @@ const CrawlerTaskPage = () => {
             setTimeoutId(Some(timeoutId))
         }
 
+    const highlightKeywords = (html: string): string =>
+        maybeKeyword
+            .map(keyword =>
+                html.replaceAll(
+                    new RegExp(`${keyword}(?!\\w)`, "gmi"),
+                    `<span class="${styles.highlightKeyword}">${keyword}</span>`
+                )
+            )
+            .getOrElse(html)
+
     return (
         <div className={styles.crawlerTaskPage}>
             <div className={styles.jobsColumn}>
                 <input onChange={onTextInput}/>
-                <div>
+                { maybeJobs.map(jobs => <div className={styles.resultsCount}>{jobs.length} results found</div>).orUndefined() }
+                <div className={styles.jobsList}>
                     {
                         maybeJobs.map(values =>
                             values.map(job =>
@@ -86,7 +97,7 @@ const CrawlerTaskPage = () => {
                 {
                     maybeJobs
                         .flatMap(jobs => Maybe.fromFalsy(jobs.find(job => job.id === jobId)))
-                        .map(job => <JobDetails {...job}/>)
+                        .map(job => <JobDetails {...job} details={highlightKeywords(job.details)}/>)
                         .orUndefined()
                 }
             </div>

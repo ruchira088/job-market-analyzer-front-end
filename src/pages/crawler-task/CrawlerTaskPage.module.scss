@@ -3,7 +3,12 @@
 }
 
 .jobsColumn {
-  flex: 1;
+  flex: 2;
+
+  .jobsList {
+    height: 100vh;
+    overflow: scroll;
+  }
 }
 
 .jobSummaryCardLink {
@@ -17,5 +22,13 @@
 }
 
 .jobDetailsColumn {
-  flex: 2;
+  flex: 3;
+}
+
+.highlightKeyword {
+  background-color: lime;
+}
+
+.resultsCount {
+  text-align: right;
 }
