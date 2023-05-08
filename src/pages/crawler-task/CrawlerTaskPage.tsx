@@ -14,6 +14,7 @@ const CrawlerTaskPage = () => {
     const {crawlerTaskId, jobId} = useParams() as { readonly crawlerTaskId: string, readonly jobId?: string }
 
     const [maybeJobs, setJobs] = useState<Maybe<Job[]>>(None())
+    const [maybeJobId, setJobId] = useState<Maybe<string>>(Maybe.fromFalsy(jobId))
     const [pageNumber, setPageNumber] = useState<number>(0)
     const [maybeKeyword, setKeyword] = useState<Maybe<string>>(None())
     const [maybeTimeoutId, setTimeoutId] = useState<Maybe<NodeJS.Timeout>>(None())
@@ -21,13 +22,17 @@ const CrawlerTaskPage = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        retrieveJobsByCrawlerTaskId(crawlerTaskId, maybeKeyword, 1, 0)
-            .then(jobs => {
-                if (jobId === undefined && jobs.length > 0) {
-                    navigate(`/crawler-task/id/${crawlerTaskId}/job/id/${jobs[0].id}`)
-                }
-            })
-    }, [jobId, navigate, crawlerTaskId, maybeKeyword])
+        maybeJobs.forEach(jobs => {
+            if (maybeJobId.isNone() && jobs.length > 0) {
+                setJobId(Some(jobs[0].id))
+            }
+        })
+    }, [maybeJobId, maybeJobs])
+
+    useEffect(() => {
+        Maybe.fromFalsy(jobId)
+            .forEach(id => setJobId( _ => Some(id)))
+    }, [jobId])
 
     useEffect(
         () => {
@@ -56,6 +61,7 @@ const CrawlerTaskPage = () => {
                     setKeyword(maybeText)
                     setPageNumber(0)
                     setJobs(None())
+                    setJobId(None())
                     navigate(`/crawler-task/id/${crawlerTaskId}`)
                 }, 500)
 
@@ -84,7 +90,7 @@ const CrawlerTaskPage = () => {
                                 <Link
                                     to={`/crawler-task/id/${crawlerTaskId}/job/id/${job.id}`}
                                     key={job.id}
-                                    className={classNames(styles.jobSummaryCardLink, {[styles.selected]: job.id === jobId})}>
+                                    className={classNames(styles.jobSummaryCardLink, {[styles.selected]: job.id === maybeJobId.orNull()})}>
                                     <JobSummaryCard {...job}/>
                                 </Link>
                             )
@@ -96,7 +102,7 @@ const CrawlerTaskPage = () => {
             <div className={styles.jobDetailsColumn}>
                 {
                     maybeJobs
-                        .flatMap(jobs => Maybe.fromFalsy(jobs.find(job => job.id === jobId)))
+                        .flatMap(jobs => Maybe.fromFalsy(jobs.find(job => job.id === maybeJobId.orNull())))
                         .map(job => <JobDetails {...job} details={highlightKeywords(job.details)}/>)
                         .orUndefined()
                 }

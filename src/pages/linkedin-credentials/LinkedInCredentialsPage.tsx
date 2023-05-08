@@ -1,9 +1,13 @@
 import React, {MouseEventHandler, useEffect, useState} from "react"
-import {LinkedInCredentials} from "../services/models/LinkedInCredentials"
-import {fetchLinkedInCredentials, insertLinkedInCredentials} from "../services/LinkedInCredentialsService"
-import ErrorDisplay from "../components/error-display/ErrorDisplay"
-import InputTextField, {setValueHook} from "../components/InputTextField"
-import {nonEmptyValidator} from "../utils/Validators"
+import {LinkedInCredentials} from "../../services/models/LinkedInCredentials"
+import {
+    fetchLinkedInCredentials,
+    insertLinkedInCredentials,
+    verifyLinkedInCredentials
+} from "../../services/LinkedInCredentialsService"
+import ErrorDisplay from "../../components/error-display/ErrorDisplay"
+import InputTextField, {setValueHook} from "../../components/InputTextField"
+import {nonEmptyValidator} from "../../utils/Validators"
 
 interface LinkedInCredentialsFormParameters {
     readonly email?: string
@@ -16,6 +20,7 @@ const LinkedInCredentialsForm = (props: LinkedInCredentialsFormParameters) => {
     const [email, setEmail] = useState(props.email || "")
     const [password, setPassword] = useState(props.password || "")
     const [errors, setErrors] = useState<string[]>([])
+    const [isValidating, setValidating] = useState<boolean>(false)
 
     const setValue = setValueHook(() => setErrors([]))
 
@@ -24,9 +29,12 @@ const LinkedInCredentialsForm = (props: LinkedInCredentialsFormParameters) => {
             const validationErrors = nonEmptyValidator({email, password})
 
             if (validationErrors.length === 0) {
-                insertLinkedInCredentials({email, password})
+                setValidating(true)
+                verifyLinkedInCredentials({email, password})
+                    .then(() => insertLinkedInCredentials({email, password}))
                     .then(() => props.onSuccess())
                     .catch(errorResponse => setErrors([errorResponse]))
+                    .finally(() => setValidating(false))
             } else {
                 setErrors(validationErrors)
             }
@@ -38,6 +46,7 @@ const LinkedInCredentialsForm = (props: LinkedInCredentialsFormParameters) => {
             <InputTextField label="LinkedIn Password" value={password} onChange={setValue(setPassword)}/>
             <button onClick={onSubmit}>OK</button>
             <button onClick={props.onCancel}>Cancel</button>
+            { isValidating ? <div>Validating...</div> : null }
             <ErrorDisplay errors={errors}/>
         </div>
     )

@@ -23,6 +23,11 @@ export const crawledJobsObservable: Observable<CrawledJob> =
         })
     })
 
+export const crawlJobs = async (): Promise<void> => {
+    const response = await fetch(`${apiUrl}/linkedIn/crawl`, {method: "POST", credentials: "include"})
+    return handleResponse(response)
+}
+
 export const retrieveCrawlerTasks = async (pageNumber: number): Promise<PaginatedResponse<CrawlerTask>> => {
     const response = await fetch(`${apiUrl}/search/crawler-task?page-number=${pageNumber}`, {credentials: "include"})
     const responseBody = await handleResponse(response)
