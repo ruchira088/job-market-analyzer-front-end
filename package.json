@@ -1,6 +1,6 @@
 {
   "name": "job-market-analyzer-front-end",
-  "version": "0.2.0",
+  "version": "0.2.1-SNAPSHOT",
   "private": true,
   "dependencies": {
     "classnames": "^2.3.2",
